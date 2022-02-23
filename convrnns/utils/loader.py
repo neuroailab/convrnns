@@ -60,32 +60,32 @@ for cell in [
 ]:
     for depth in ["shallow", "intermediate"]:
         model_name = cell + "_" + depth
-        MODEL_TO_KWARGS[model_name] = {"base_name": "models/{}".format(model_name)}
+        MODEL_TO_KWARGS[model_name] = {"base_name": "convrnns/models/{}".format(model_name)}
 MODEL_TO_KWARGS["rgc_intermediate_tmaxconf"] = {
-    "base_name": "models/rgc_intermediate",
+    "base_name": "convrnns/models/rgc_intermediate",
     "decoder_type": "max_conf",
     "decoder_trainable": True,
 }
 MODEL_TO_KWARGS["rgc_intermediate_t22_tmaxconf"] = {
-    "base_name": "models/rgc_intermediate_t22",
+    "base_name": "convrnns/models/rgc_intermediate_t22",
     "decoder_type": "max_conf",
     "decoder_trainable": True,
 }
 MODEL_TO_KWARGS["rgc_intermediate_dthresh"] = {
-    "base_name": "models/rgc_intermediate",
+    "base_name": "convrnns/models/rgc_intermediate",
     "decoder_type": "thresh",
     "decoder_trainable": False,
 }
 MODEL_TO_KWARGS["ugrnn_intermediate_t30"] = {
-    "base_name": "models/ugrnn_intermediate_t30"
+    "base_name": "convrnns/models/ugrnn_intermediate_t30"
 }
 MODEL_TO_KWARGS["ugrnn_intermediate_t30_tmaxconf"] = {
-    "base_name": "models/ugrnn_intermediate_t30",
+    "base_name": "convrnns/models/ugrnn_intermediate_t30",
     "decoder_type": "max_conf",
     "decoder_trainable": True,
 }
 MODEL_TO_KWARGS["ugrnn_intermediate_t30_dthresh"] = {
-    "base_name": "models/ugrnn_intermediate_t30",
+    "base_name": "convrnns/models/ugrnn_intermediate_t30",
     "decoder_type": "thresh",
     "decoder_trainable": False,
 }

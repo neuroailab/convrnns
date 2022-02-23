@@ -108,7 +108,7 @@ def model_func(
 
     G = main.graph_from_json(base_name)
     if convrnn_type is None:
-        convrnn_type = base_name.split("/")[1].split("_")[0]
+        convrnn_type = base_name.split("/")[-1].split("_")[0]
     convrnn_type = convrnn_type.lower()
     print("Using {} convrnn cell".format(convrnn_type))
     num_layers = len(G)
@@ -138,7 +138,7 @@ def model_func(
     elif num_layers == 6:
         cell_layers = ["conv{}".format(l) for l in range(3, num_layers)]
         if convrnn_type == "lstm":
-            layer_params = np.load("./configs/lstm_shallow.npz", allow_pickle=True)[
+            layer_params = np.load("./convrnns/configs/lstm_shallow.npz", allow_pickle=True)[
                 "arr_0"
             ][()]["model_params"]["layer_params"]
     if not isinstance(out_layers, list):

@@ -11,13 +11,13 @@ All models are "biologically unrolled", where propagation along each arrow takes
 
 ## Available Models
 Models are named according to the convention of `[cell type]_[feedforward depth]_[optional decoder/additional properties]`, all of which are trained on ImageNet categorization and described in [our paper](https://www.biorxiv.org/content/10.1101/2021.02.17.431717).
-Some models may be better than others suited based on your needs, but we recommend: 
+Some models may be better suited than others based on your needs, but we recommend: 
 - `rgc_intermediate`, if you want a model that is task performant *and* well matches temporally varying primate core object recognition data (neural & behavioral recordings). Note that this model and the other `rgc_intermediate*` models are the only models that also have long-range feedback connections (found through large-scale meta-optimization), in addition to parameter efficient layer-local recurrent cells.
 - `ugrnn_intermediate`, if you want a model that *best* matches temporally varying primate data.
-- `rgc_intermediate_t22_tmaxconf`, if you want a model that is task performant *and unrolled for a longer amount of timesteps (22) during training*. This model required Google Cloud TPUv3 Pods to train.
+- `rgc_intermediate_t22_tmaxconf`, if you want a model that is task performant *and unrolled for a longer amount of timesteps (22) during training*. This model and the `ugrnn_intermediate_t30*` models required Google Cloud TPUv3 Pods to train.
 - `rgc_shallow`, if you want a shallow (6 layer) model that is most task performant and best matches temporally varying primate data (when compared to other shallow ConvRNNs). Use this model if you have a resource limitation when running inference or the domain of application only feasibly allows the use of shallow networks. Otherwise, we generally recommend using any of the above intermediate (11 layer) models.
 
-The models all expect images of size 224x224x3, normalized between 0 and 1, following by ImageNet mean and std (we include code that performs this normalization automatically in `convrnns/run_model.py`).
+The models all expect images of size 224x224x3, normalized between 0 and 1, following by ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
 By default (`image_pres='default'`), the models are automatically unrolled (16 timesteps for `shallow` and 17 timesteps for `intermediate`), and given the same video presentation format as they were trained with, which involves for all models to shut off the image presentation with a mean gray stimulus after 12 timesteps (however, the models with `t22` and `t30` in their names were trained with a constant image presentation for 22 and 30 timesteps, respectively).
 If you prefer to unroll the models for a different number of timesteps and with a constant image presentation, then specify a value for `times` and `image_pres='constant'`.
 If you prefer to have the model image presentation to turn off at a specified point, then specify a value for `image_off`.
@@ -60,11 +60,10 @@ cd convrnns/
 pip install -e .
 ```
 Note that CPU is used by default (having a GPU is not required, though recommended if running inferences on a large number of images).
-If you prefer to use GPU, then be sure to install `tensorflow-gpu==1.13.1` instead of `tensorflow`, and ensure the usual CUDA dependencies are met.
+If you prefer to use GPU, then be sure to install `tensorflow-gpu==1.13.1` instead of `tensorflow`, and ensure that you have `CUDA 10.0` and `cudnn 7.3` installed.
 
 Next, download the model checkpoints by running:
 ```
-cd convrnns/convrnns/
 ./get_checkpoints.sh
 ```
 The total size is currently 5.3 GB, so if you prefer to download only the weights of one particular model or just a few, you can modify the script to do that.
@@ -75,7 +74,6 @@ The model layers for the `intermediate` ConvRNNs are named: `'conv1','conv2','co
 
 Here is an example for extracting the features of `'conv9'` and `'conv10'`:
 ```
-cd convrnns/convrnns/
 python run_model.py --model_name='rgc_intermediate' --out_layers='conv9,conv10'
 ```
 The above command returns a dictionary whose keys are the model layers, and whose values are the features for each timepoint (starting from when that layer has a feedforward output).
@@ -84,6 +82,7 @@ If you are interested in neural fits, we have found that for the `shallow` ConvR
 For the `intermediate` ConvRNNs, model layers `'conv5'` and `'conv6'` best match to V4, `'conv7'` and `'conv8'` best match to pIT, and `'conv9'` and `'conv10'` best match to cIT/aIT.
 
 ## Cite
+If you used this codebase for your research, please consider citing our paper:
 ```
 @article{Nayebi2022ConvRNNs,
   title={Recurrent Connections in the Primate Ventral Visual Stream Mediate a Tradeoff Between Task Performance and Network Size During Core Object Recognition},
