@@ -70,7 +70,12 @@ The total size is currently 5.3 GB, so if you prefer to download only the weight
 
 ## Extracting Model Features
 The model layers for the `shallow` ConvRNNs are named: `'conv1','conv2','conv3','conv4','conv5','conv6','imnetds'`.
-The model layers for the `intermediate` ConvRNNs are named: `'conv1','conv2','conv3','conv4','conv5','conv6','conv7','conv8','conv9','conv10','imnetds'`, where in both cases `imnetds` is the final 1000-way categorization layer.
+The ConvRNN cells are embedded in layers `'conv3'`, `'conv4'`, and `'conv5'` for these models.
+
+The model layers for the `intermediate` ConvRNNs are named: `'conv1','conv2','conv3','conv4','conv5','conv6','conv7','conv8','conv9','conv10','imnetds'`.
+The ConvRNN cells are embedded in layers `'conv4'` through `'conv10'` for these models.
+
+For both model types, `imnetds` is always the final 1000-way categorization layer.
 
 Here is an example for extracting the features of `'conv9'` and `'conv10'`:
 ```
