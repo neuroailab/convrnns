@@ -55,7 +55,7 @@ conda create -y -n your_env python=3.6.10 anaconda
 ```
 To install this package and all of its dependecies, clone this repo on your machine and then install it via pip:
 ```
-git clone ssh://git@github.com/neuroailab/convrnns.git
+git clone https://github.com/neuroailab/convrnns
 cd convrnns/
 pip install -e .
 ```
