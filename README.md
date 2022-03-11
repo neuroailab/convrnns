@@ -17,7 +17,7 @@ Some models may be better suited than others based on your needs, but we recomme
 - `rgc_intermediate_t22_tmaxconf`, if you want a model that is task performant *and unrolled for a longer amount of timesteps (22) during training*. This model and the `ugrnn_intermediate_t30*` models used a constant image presentation (unlike the other models where the image presentation sequence turns off eventually).
 - `rgc_shallow`, if you want a shallow (6 layer) model that is most task performant and best matches temporally varying primate data (when compared to other shallow ConvRNNs). Use this model if you have a resource limitation when running inference or the domain of application only feasibly allows the use of shallow networks. Otherwise, we generally recommend using any of the above intermediate (11 layer) models.
 
-The models all expect images of size 224x224x3, normalized between 0 and 1, following by ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
+The models all expect images of size 224x224x3, normalized between 0 and 1, and by ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
 By default (`image_pres='default'`), the models are automatically unrolled (16 timesteps for `shallow` and 17 timesteps for `intermediate`), and given the same video presentation format as they were trained with, which involves for all models to shut off the image presentation with a mean gray stimulus after 12 timesteps (however, the models with `t22` and `t30` in their names were trained with a *constant* image presentation for 22 and 30 timesteps, respectively).
 If you prefer to unroll the models for a different number of timesteps and with a constant image presentation, then specify a value for `times` and `image_pres='constant'`.
 If you prefer to have the model image presentation to turn off at a specified point, then specify a value for `image_off`.
@@ -82,6 +82,7 @@ Here is an example for extracting the features of `'conv9'` and `'conv10'`:
 python run_model.py --model_name='rgc_intermediate' --out_layers='conv9,conv10'
 ```
 The above command returns a dictionary whose keys are the model layers, and whose values are the features for each timepoint (starting from when that layer has a feedforward output).
+**Note:** you will need to supply your own images by modifying the `run_model.py` script prior to running it.
 
 If you are interested in neural fits, we have found that for the `shallow` ConvRNNs, model layer `'conv3'` best matches to V4, `'conv4'` best matches to pIT, and `'conv5'` best matches to cIT/aIT.
 For the `intermediate` ConvRNNs, model layers `'conv5'` and `'conv6'` best match to V4, `'conv7'` and `'conv8'` best match to pIT, and `'conv9'` and `'conv10'` best match to cIT/aIT.
