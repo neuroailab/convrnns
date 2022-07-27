@@ -94,6 +94,8 @@ If you used this codebase for your research, please consider citing our paper:
   title={Recurrent Connections in the Primate Ventral Visual Stream Mediate a Tradeoff Between Task Performance and Network Size During Core Object Recognition},
   author={Nayebi, Aran and Sagastuy-Brena, Javier and Bear, Daniel M and Kar, Kohitij and Kubilius, Jonas and Ganguli, Surya and Sussillo, David and DiCarlo, James J and Yamins, Daniel LK},
   journal={Neural Computation},
+  volume={34},
+  pages={1652--1675},
   year={2022},
   publisher={MIT Press}
 }
