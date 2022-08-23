@@ -17,11 +17,6 @@ Some models may be better suited than others based on your needs, but we recomme
 - `rgc_intermediate_t22_tmaxconf`, if you want a model that is task performant *and unrolled for a longer amount of timesteps (22) during training*. This model and the `ugrnn_intermediate_t30*` models used a constant image presentation (unlike the other models where the image presentation sequence turns off eventually).
 - `rgc_shallow`, if you want a shallow (6 layer) model that is most task performant and best matches temporally varying primate data (when compared to other shallow ConvRNNs). Use this model if you have a resource limitation when running inference or the domain of application only feasibly allows the use of shallow networks. Otherwise, we generally recommend using any of the above intermediate (11 layer) models.
 
-The models all expect images of size 224x224x3, normalized between 0 and 1, and by ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
-By default (`image_pres='default'`), the models are automatically unrolled (16 timesteps for `shallow` and 17 timesteps for `intermediate`), and given the same video presentation format as they were trained with, which involves for all models to shut off the image presentation with a mean gray stimulus after 12 timesteps (however, the models with `t22` and `t30` in their names were trained with a *constant* image presentation for 22 and 30 timesteps, respectively).
-If you prefer to unroll the models for a different number of timesteps and with a constant image presentation, then specify a value for `times` and `image_pres='constant'`.
-If you prefer to have the model image presentation to turn off at a specified point, then specify a value for `image_off`.
-
 Below is a table of all the models and their ImageNet validation set accuracy:
 
 | Model Name      | Top1 Accuracy | Top5 Accuracy |
@@ -69,6 +64,7 @@ Next, download the model checkpoints by running:
 The total size is currently 5.3 GB, so if you prefer to download only the weights of one particular model or just a few, you can modify the script to do that.
 
 ## Extracting Model Features
+### i. Model Layers
 The model layers for the `shallow` ConvRNNs are named: `'conv1','conv2','conv3','conv4','conv5','conv6','imnetds'`.
 The ConvRNN cells are embedded in layers `'conv3'`, `'conv4'`, and `'conv5'` for these models.
 
@@ -84,8 +80,19 @@ python run_model.py --model_name='rgc_intermediate' --out_layers='conv9,conv10'
 The above command returns a dictionary whose keys are the model layers, and whose values are the features for each timepoint (starting from when that layer has a feedforward output).
 **Note:** you will need to supply your own images by modifying the `run_model.py` script prior to running it.
 
-If you are interested in neural fits, we have found that for the `shallow` ConvRNNs, model layer `'conv3'` best matches to V4, `'conv4'` best matches to pIT, and `'conv5'` best matches to cIT/aIT.
+If you are interested in neural fits, we generally recommend re-fitting the model features based on your neural data and transform class that you are using, and picking the model layer(s) that yield(s) maximum neural predictivity for that visual area.
+For reference, for our data, we have found that for the `shallow` ConvRNNs, model layer `'conv3'` best matches to V4, `'conv4'` best matches to pIT, and `'conv5'` best matches to cIT/aIT.
 For the `intermediate` ConvRNNs, model layers `'conv5'` and `'conv6'` best match to V4, `'conv7'` and `'conv8'` best match to pIT, and `'conv9'` and `'conv10'` best match to cIT/aIT.
+
+### ii. Stimulus Presentation
+The models all expect images of size 224x224x3, normalized between 0 and 1, and by the ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
+When you compare to neural data, it is strongly recommended to **present the images in the same way they were presented to the subjects**, where each model timestep roughly corresponds to 10ms.
+For example, in our work the images were presented to primates for 260 ms, and ``turned off'' (replaced with a mean gray stimulus) at 100 ms.
+Therefore, we unrolled the models for 26 timesteps, with `image_off` set to 10.
+
+For ImageNet performance reporting in the table above, by default (`image_pres='default'`), the models are automatically unrolled (16 timesteps for `shallow` and 17 timesteps for `intermediate`), and given the same video presentation format as they were *trained* with, which involves for all models to shut off the image presentation with a mean gray stimulus after 12 timesteps (however, the models with `t22` and `t30` in their names were trained with a *constant* image presentation for 22 and 30 timesteps, respectively).
+If you prefer to unroll the models for a different number of timesteps and with a constant image presentation, then specify a value for `times` and `image_pres='constant'`.
+If you prefer to have the model image presentation to turn off at a specified point, then specify a value for `image_off`, and replace mean gray (0.5) with a different off stimulus if that is different in your experimental setup.
 
 ## Cite
 If you used this codebase for your research, please consider citing our paper:
