@@ -87,7 +87,7 @@ For the `intermediate` ConvRNNs, model layers `'conv5'` and `'conv6'` best match
 ### ii. Stimulus Presentation
 The models all expect images of size 224x224x3, normalized between 0 and 1, and by the ImageNet mean and std (we include code that performs this normalization automatically in `run_model.py`).
 When you compare to neural data, it is strongly recommended to **present the images in the same way they were presented to the subjects**, where each model timestep roughly corresponds to 10ms.
-For example, in our work the images were presented to primates for 260 ms, and ``turned off'' (replaced with a mean gray stimulus) at 100 ms.
+For example, in our work, the images were presented to primates for 260 ms, and "turned off" (replaced with a mean gray stimulus) at 100 ms.
 Therefore, we unrolled the models for 26 timesteps, with `image_off` set to 10.
 
 For ImageNet performance reporting in the table above, by default (`image_pres='default'`), the models are automatically unrolled (16 timesteps for `shallow` and 17 timesteps for `intermediate`), and given the same video presentation format as they were *trained* with, which involves for all models to shut off the image presentation with a mean gray stimulus after 12 timesteps (however, the models with `t22` and `t30` in their names were trained with a *constant* image presentation for 22 and 30 timesteps, respectively).
