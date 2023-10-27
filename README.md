@@ -78,7 +78,7 @@ Here is an example for extracting the features of `'conv9'` and `'conv10'`:
 python run_model.py --model_name='rgc_intermediate' --out_layers='conv9,conv10'
 ```
 The above command returns a dictionary whose keys are the model layers, and whose values are the features for each timepoint (starting from when that layer has a feedforward output).
-**Note:** you will need to supply your own images by modifying the `run_model.py` script prior to running it.
+**Note: you will need to supply your own images by modifying the `run_model.py` script prior to running it. If you use Pytorch, we recommend you first write out your stimuli to NumPy arrays (e.g. via `npz` or `pickle`) to pass to the pretrained models.**
 
 If you are interested in neural fits, we generally recommend re-fitting the model features based on your neural data and transform class that you are using, and picking the model layer(s) that yield(s) maximum neural predictivity for that visual area.
 For reference, for our data, we have found that for the `shallow` ConvRNNs, model layer `'conv3'` best matches to V4, `'conv4'` best matches to pIT, and `'conv5'` best matches to cIT/aIT.
